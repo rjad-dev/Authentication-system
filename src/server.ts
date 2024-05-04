@@ -1,12 +1,32 @@
 import express from "express";
+import { hostUrl, port, Database } from "./config";
 
-const app = express();
-const port = 8000;
+class Server {
+  app: express.Application
+  constructor(){
+    this.app = express();
+    this.configuration();
+  }
 
-app.get("/", (req, res) => {
-  res.send("hello world");
-});
+  private configuration() {
+    this.app.use(express.json())
+  }
 
-app.listen(port, () => {
-  return console.log(`Server started at http://localhost:${port}`);
-});
+  private async connect() {
+    try {
+      await Database.connection();
+    } catch (error){
+      throw new Error(error)
+    }
+  }
+
+  public start() {
+    this.connect()
+    this.app.listen(port, () => {
+      console.info(`App started at ${hostUrl}:${port}`)
+    })
+  }
+}
+
+const server = new Server();
+server.start()
