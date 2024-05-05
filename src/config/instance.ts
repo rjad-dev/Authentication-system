@@ -37,7 +37,7 @@ class Database {
     })
   }
 
-  static createDbInstance(): Database {
+  static get(): Database {
     if (!Database.instance) {
         Database.instance = new Database()
     }
@@ -57,5 +57,5 @@ class Database {
   }
 }
 
-const database = Database.createDbInstance();
+const database = Database.get();
 export { database as Database }

@@ -12,7 +12,7 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true,
       },
-      username: {
+      name: {
         type: DataTypes.STRING(50),
         allowNull: false,
       },
@@ -29,7 +29,7 @@ module.exports = {
         allowNull: false,
         defaultValue: 'UNVERIFIED'
       },
-      verification_token: {
+      verification_code: {
         type: DataTypes.INTEGER,
         allowNull: true,
         validate: {
@@ -37,12 +37,9 @@ module.exports = {
         }
       },
       is_verified: {
-        type: Sequelize.BOOLEAN,
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
         defaultValue: false
-      },
-      refresh_token: {
-        type: Sequelize.STRING,
-        allowNull: true
       },
       created_at: {
         type: DataTypes.DATE,
@@ -65,20 +62,11 @@ module.exports = {
         deleted_at: null,
       },
     });
-    await queryInterface.addIndex('users', ['verification_token'], {
+    await queryInterface.addIndex('users', ['verification_code'], {
       concurrently: true,
       unique: true,
       type: 'UNIQUE',
-      name: 'users_verification_token',
-      where: {
-        deleted_at: null,
-      },
-    });
-    await queryInterface.addIndex('users', ['refresh_token'], {
-      concurrently: true,
-      unique: true,
-      type: 'UNIQUE',
-      name: 'users_refresh_token',
+      name: 'users_verification_code',
       where: {
         deleted_at: null,
       },
@@ -86,9 +74,8 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.removeIndex('users', 'email');
-    await queryInterface.removeIndex('users', 'verification_token');
-    await queryInterface.removeIndex('users', 'refresh_token');
+    await queryInterface.removeIndex('users', 'users_email');
+    await queryInterface.removeIndex('users', 'users_verification_code');
     await queryInterface.dropTable('users');
     await queryInterface.sequelize.query('DROP TYPE IF EXISTS "enum_users_status";');
   }

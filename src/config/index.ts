@@ -31,6 +31,12 @@ export const port = mustExist(+process.env.PORT! as number, "PORT"),
     logging: boolean;
     timezone: string;
   },
-  hostUrl = mustExist(process.env.HOST_URL!, "HOST_URL");
+  hostUrl = mustExist(process.env.HOST_URL!, "HOST_URL"),
+  mail = mustExist(process.env.MAIL!, "MAIL"),
+  mailPassword = mustExist(process.env.MAIL_PASSWORD!, "MAIL_PASSWORD"),
+  saltRounds = 10,
+  jwtSecretKey = mustExist(process.env.JWT_CLIENT_SECRET!, "JWT_CLIENT_SECRET"),
+  accessTokenExpiresIn = '1h',
+  refreshTokenExpiresIn = '7d'
 
 export * from "./instance";
